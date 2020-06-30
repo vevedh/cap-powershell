@@ -6,6 +6,7 @@ export declare class PowershellPluginWeb extends WebPlugin implements Powershell
     RemoteRef: any;
     constructor();
     echo(value: string): Promise<string>;
+    runPowerShell(cmd: string): Promise<any>;
 }
 declare const PowershellPlugin: PowershellPluginWeb;
 export { PowershellPlugin };

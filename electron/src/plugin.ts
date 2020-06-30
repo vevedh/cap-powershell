@@ -2,12 +2,14 @@
 import { WebPlugin } from "@capacitor/core";
 import { PowershellPluginPlugin } from "./definitions";
 const { remote } = require("electron");
+const  powershell  = require('node-powershell');
 
 export class PowershellPluginWeb extends WebPlugin
   implements PowershellPluginPlugin {
   Path: any = null;
   NodeFs: any = null;
   RemoteRef: any = null;
+
 
   constructor() {
     super({
@@ -21,12 +23,33 @@ export class PowershellPluginWeb extends WebPlugin
   }
 
   async echo(value: string ): Promise<string> {
-    console.log("ECHO", value);
-    //console.log("Remote :",this.RemoteRef);
-    //console.log("Path :",this.Path);
-    //console.log("NodeFS :",this.NodeFs);
+    console.log("plugin.js ECHO", value);
     return value;
   }
+
+  async runPowerShell(cmd: string): Promise<any> {
+    var psw = new powershell({
+      executionPolicy: 'Bypass',
+      outputEncoding: 'utf-8',
+      noProfile: true
+    });
+  
+    return new Promise(function (resolve, reject) {
+      psw.addCommand(`$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding`)
+      psw.addCommand(cmd)
+        .then(() => psw.invoke()
+          .then((res:any) => {
+            //log.info("Résulat brut :",res);
+            psw.dispose();
+            resolve(res);
+          }, (reason:any) => {
+            reject(reason);
+          })
+        )
+    });
+  }
+
+
 }
 
 const PowershellPlugin = new PowershellPluginWeb();

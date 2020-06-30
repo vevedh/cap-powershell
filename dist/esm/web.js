@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { WebPlugin } from "@capacitor/core";
 const { remote } = require("electron");
+const powershell = require('node-powershell');
 export class PowershellPluginWeb extends WebPlugin {
     constructor() {
         super({
@@ -25,11 +26,32 @@ export class PowershellPluginWeb extends WebPlugin {
     }
     echo(value) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("ECHO", value);
+            console.log(" web.js ECHO", value);
             //console.log("Remote :",this.RemoteRef);
             //console.log("Path :",this.Path);
             //console.log("NodeFS :",this.NodeFs);
             return value;
+        });
+    }
+    runPowerShell(cmd) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var psw = new powershell({
+                executionPolicy: 'Bypass',
+                outputEncoding: 'utf-8',
+                noProfile: true
+            });
+            return new Promise(function (resolve, reject) {
+                psw.addCommand(`$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding`);
+                psw.addCommand(cmd)
+                    .then(() => psw.invoke()
+                    .then((res) => {
+                    //log.info("Résulat brut :",res);
+                    psw.dispose();
+                    resolve(res);
+                }, (reason) => {
+                    reject(reason);
+                }));
+            });
         });
     }
 }

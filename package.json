@@ -1,6 +1,6 @@
 {
   "name": "cap-powershell",
-  "version": "1.0.1",
+  "version": "2.0.2",
   "description": "Plugin PowerShell Capacitor",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -16,21 +16,25 @@
   "dependencies": {
     "@capacitor/core": "latest",
     "fs": "0.0.1-security",
-    "path": "^0.12.7",
-    "tslib": "^2.0.0"
+    "node-powershell": "^4.0.0",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "@capacitor/android": "latest",
     "@capacitor/ios": "latest",
+    "@types/node": "^12.0.0",
+    "electron": "^9.0.5",
     "rimraf": "^3.0.0",
     "rollup": "^2.18.1",
     "rollup-plugin-node-resolve": "^5.2.0",
+    "tslib": "^1.13.0",
     "typescript": "^3.2.4"
   },
   "files": [
     "dist/",
     "ios/",
     "android/",
+    "electron/",
     "CapPowershell.podspec"
   ],
   "keywords": [

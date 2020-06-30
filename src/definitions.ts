@@ -6,4 +6,5 @@ declare module "@capacitor/core" {
 
 export interface PowershellPluginPlugin {
   echo(value: string ): Promise<string>;
+  runPowerShell(cmd: string): Promise<any>;
 }

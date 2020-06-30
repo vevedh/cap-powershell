@@ -2062,6 +2062,7 @@ var capacitorPlugin = (function (exports) {
     };
 
     const { remote } = require("electron");
+    const powershell = require('node-powershell');
     class PowershellPluginWeb extends WebPlugin {
         constructor() {
             super({
@@ -2078,11 +2079,29 @@ var capacitorPlugin = (function (exports) {
         }
         echo(value) {
             return __awaiter(this, void 0, void 0, function* () {
-                console.log("ECHO", value);
-                //console.log("Remote :",this.RemoteRef);
-                //console.log("Path :",this.Path);
-                //console.log("NodeFS :",this.NodeFs);
+                console.log("plugin.js ECHO", value);
                 return value;
+            });
+        }
+        runPowerShell(cmd) {
+            return __awaiter(this, void 0, void 0, function* () {
+                var psw = new powershell({
+                    executionPolicy: 'Bypass',
+                    outputEncoding: 'utf-8',
+                    noProfile: true
+                });
+                return new Promise(function (resolve, reject) {
+                    psw.addCommand(`$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding`);
+                    psw.addCommand(cmd)
+                        .then(() => psw.invoke()
+                        .then((res) => {
+                        //log.info("Résulat brut :",res);
+                        psw.dispose();
+                        resolve(res);
+                    }, (reason) => {
+                        reject(reason);
+                    }));
+                });
             });
         }
     }
