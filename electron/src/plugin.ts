@@ -20,10 +20,12 @@ export class PowershellPluginWeb extends WebPlugin
     this.NodeFs = require("fs");
   }
 
-  async echo(options: { value: string }): Promise<{ value: string }> {
-    console.log("ECHO", options);
-    console.log(this.RemoteRef);
-    return options;
+  async echo(value: string ): Promise<string> {
+    console.log("ECHO", value);
+    console.log("Remote :",this.RemoteRef);
+    console.log("Path :",this.Path);
+    console.log("NodeFS :",this.NodeFs);
+    return value;
   }
 }
 
