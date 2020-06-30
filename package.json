@@ -1,6 +1,6 @@
 {
   "name": "cap-powershell",
-  "version": "0.0.8",
+  "version": "1.0.1",
   "description": "Plugin PowerShell Capacitor",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -15,6 +15,8 @@
   "license": "MIT",
   "dependencies": {
     "@capacitor/core": "latest",
+    "fs": "0.0.1-security",
+    "path": "^0.12.7",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
@@ -42,10 +44,10 @@
     },
     "android": {
       "src": "android"
+    },
+    "electron": {
+      "src": "electron/dist/plugin.js"
     }
-  },
-  "electron": {
-    "src": "electron/dist/plugin.js"
   },
   "repository": {
     "type": "git",

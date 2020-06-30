@@ -18,9 +18,9 @@ export class PowershellPluginWeb extends WebPlugin {
     echo(value) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("ECHO", value);
-            console.log("Remote :", this.RemoteRef);
-            console.log("Path :", this.Path);
-            console.log("NodeFS :", this.NodeFs);
+            //console.log("Remote :",this.RemoteRef);
+            //console.log("Path :",this.Path);
+            //console.log("NodeFS :",this.NodeFs);
             return value;
         });
     }
