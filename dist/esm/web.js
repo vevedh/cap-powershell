@@ -8,21 +8,47 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { WebPlugin } from "@capacitor/core";
-const { remote } = require("electron");
+const { ipcRenderer, webFrame, remote, desktopCapturer, clipboard } = require("electron");
 const powershell = require('node-powershell');
 export class PowershellPluginWeb extends WebPlugin {
     constructor() {
         super({
             name: "PowershellPlugin",
-            platforms: ["electron"],
+            platforms: ["web"],
         });
         this.Path = null;
         this.NodeFs = null;
         this.RemoteRef = null;
+        this.IpcRenderRef = null;
+        this.WebFrameRef = null;
+        //ShellRef:any = null;
+        this.DesktopCapturerRef = null;
+        this.ClipBoardRef = null;
+        this.ScreenRef = null;
+        this.OsRef = null;
+        this.NotifierRef = null;
+        this.SshRef = null;
+        this.PowerShellRef = null;
+        this.SysInfosRef = null;
         console.log("PowershellPlugin");
         this.RemoteRef = remote;
+        this.WebFrameRef = webFrame;
+        this.IpcRenderRef = ipcRenderer;
+        //this.ShellRef = Shell;
+        this.DesktopCapturerRef = desktopCapturer;
+        this.ClipBoardRef = clipboard;
+        this.ScreenRef = window.screen;
+        this.PowerShellRef = new powershell({
+            executionPolicy: 'Bypass',
+            outputEncoding: 'utf-8',
+            noProfile: true
+        });
         this.Path = require("path");
-        this.NodeFs = require("fs");
+        this.NotifierRef = require('node-notifier');
+        this.SshRef = require('ssh2').Client;
+        this.OsRef = require('os');
+        this.NodeFs = require('fs-jetpack');
+        this.SysInfosRef = require('systeminformation');
     }
     echo(value) {
         return __awaiter(this, void 0, void 0, function* () {

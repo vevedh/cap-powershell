@@ -1,6 +1,6 @@
 import { __awaiter } from "tslib";
 import { WebPlugin } from "@capacitor/core";
-const { remote } = require("electron");
+const { ipcRenderer, webFrame, remote, desktopCapturer, clipboard } = require("electron");
 const powershell = require('node-powershell');
 export class PowershellPluginWeb extends WebPlugin {
     constructor() {
@@ -11,10 +11,36 @@ export class PowershellPluginWeb extends WebPlugin {
         this.Path = null;
         this.NodeFs = null;
         this.RemoteRef = null;
+        this.IpcRenderRef = null;
+        this.WebFrameRef = null;
+        //ShellRef:any = null;
+        this.DesktopCapturerRef = null;
+        this.ClipBoardRef = null;
+        this.ScreenRef = null;
+        this.OsRef = null;
+        this.SysInfosRef = null;
+        this.NotifierRef = null;
+        this.SshRef = null;
+        this.PowerShellRef = null;
         console.log("PowershellPlugin");
         this.RemoteRef = remote;
+        this.WebFrameRef = webFrame;
+        this.IpcRenderRef = ipcRenderer;
+        //this.ShellRef = shell;
+        this.DesktopCapturerRef = desktopCapturer;
+        this.ClipBoardRef = clipboard;
+        this.ScreenRef = window.screen;
+        this.PowerShellRef = new powershell({
+            executionPolicy: 'Bypass',
+            outputEncoding: 'utf-8',
+            noProfile: true
+        });
         this.Path = require("path");
-        this.NodeFs = require("fs");
+        this.NotifierRef = require('node-notifier');
+        this.SshRef = require('ssh2').Client;
+        this.OsRef = require('os');
+        this.NodeFs = require('fs-jetpack');
+        this.SysInfosRef = require('systeminformation');
     }
     echo(value) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -24,20 +50,17 @@ export class PowershellPluginWeb extends WebPlugin {
     }
     runPowerShell(cmd) {
         return __awaiter(this, void 0, void 0, function* () {
-            var psw = new powershell({
-                executionPolicy: 'Bypass',
-                outputEncoding: 'utf-8',
-                noProfile: true
-            });
+            const pws = this.PowerShellRef;
             return new Promise(function (resolve, reject) {
-                psw.addCommand(`$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding`);
-                psw.addCommand(cmd)
-                    .then(() => psw.invoke()
+                pws.addCommand(`$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding`);
+                pws.addCommand(cmd)
+                    .then(() => pws.invoke()
                     .then((res) => {
                     //log.info("Résulat brut :",res);
-                    psw.dispose();
+                    //this.PowerShellRef.dispose();
                     resolve(res);
                 }, (reason) => {
+                    //this.PowerShellRef.dispose();
                     reject(reason);
                 }));
             });
