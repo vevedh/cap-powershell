@@ -22,7 +22,7 @@
     "os": "^0.1.1",
     "path": "^0.12.7",
     "ssh2": "^0.8.9",
-    "systeminformation": "^4.26.10"
+    "systeminformation": "^5.3.1"
   },
   "devDependencies": {
     "@capacitor/android": "latest",
